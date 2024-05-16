@@ -1,0 +1,51 @@
+source org
+
+public class ApexConnected2Source {
+
+    @future(callout=true)
+    
+    public static void getAccount(){
+        
+        
+        HttpRequest req = new HttpRequest();
+        req.setEndPoint('callout:NameConn2/services/apexrest/Account/');
+        req.setHeader('content-type','application/json; charset=UTF-8');
+        req.setHeader('Accept','application/json');
+        req.setMethod('GET');
+        
+        http http = new http();
+        HttpResponse res = http.send(req);
+        system.debug('Bodyyy' +res.getBody());
+        system.debug('Bodyyy' +res.getStatusCode());
+      //  Type expectedType = Type.forName(res.getBody());
+      //  system.debug(expectedType);
+    //    string accountslst = JSON.serialize(res.getBody());
+     //    system.debug(accountslst);
+        
+       list<Account> lst = (list<Account>)JSON.deserialize(res.getBody(),list<Account>.class);
+   
+        system.debug(lst);
+
+        
+        
+        
+        
+    }
+}
+
+
+
+target org
+
+@RestResource(urlMapping='/Account/*')
+global class Connected2Integration {
+
+    @HttpGet
+    global static list<Account> getAccounts(){
+        return [select id ,name from account];
+    }
+}
+
+
+
+https://www.youtube.com/watch?v=cWBIbM_sCrQ
