@@ -27,12 +27,24 @@ public class ApexConnected2Source {
         system.debug(lst);
 
         
+    }
+    
+    @future(callout=true)
+    public static void createAccount(){
+        HttpRequest req = new HttpRequest();
+        req.setEndPoint('callout:NameConn2/services/apexrest/Account/');
+        req.setHeader('content-type','application/json; charset=UTF-8');
+        req.setHeader('Accept','application/json');
+        req.setBody ('{"acName" : "SF NooB 1","rating" : "Hot"}');
+        req.setMethod('POST');
         
-        
-        
+         http http = new http();
+        HttpResponse res = http.send(req);
+        Account ac = (Account)JSON.deserialize(res.getBody(),Account.class);
+   
+        system.debug(ac);
     }
 }
-
 
 
 target org
@@ -44,8 +56,15 @@ global class Connected2Integration {
     global static list<Account> getAccounts(){
         return [select id ,name from account];
     }
+    
+    @HttpPost
+    global static Account createAcc(string acName, string rating){
+        account ac = new account();
+        ac.name = acName;
+        ac.Rating = rating;
+        insert ac;
+        return ac;
+    }
 }
-
-
 
 https://www.youtube.com/watch?v=cWBIbM_sCrQ
