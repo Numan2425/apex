@@ -1,0 +1,28 @@
+global class calendarClasss {
+
+    global static void getCalendar(){ 
+   HttpRequest request = new HttpRequest();
+    request.setMethod('GET');
+    request.setEndpoint('callout:Namecalendar1/calendar/v3/calendars/primary/events');
+        http http = new http();
+   Httpresponse response = http.send(request);
+        system.debug(response);
+        system.debug(response.getbody());
+        
+        
+        
+}
+    
+    global static void getCalendar1(){ 
+   HttpRequest request = new HttpRequest();
+    request.setMethod('GET');
+    request.setEndpoint('callout:Namecalendar1/calendar/v3/calendars/numanahmadstudy@gmail.com/events/18n2a0h5qvn9dmt8r999m64cni');
+        http http = new http();
+   Httpresponse response = http.send(request);
+        system.debug(response);
+        system.debug(response.getbody());
+        
+        
+        
+}
+}
