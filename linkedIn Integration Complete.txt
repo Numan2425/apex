@@ -1,0 +1,141 @@
+public class IntegrationSalesforceForImages {
+    
+    public static string signIntoLinkedTogetId(){
+        http http = new http();
+        httpRequest req = new httpRequest();
+		req.setMethod('GET');
+        req.setEndPoint('callout:NameCredentialsForLinkedIn/v2/userinfo');
+        httpResponse res =http.send(req);
+        system.debug('response' + res.getBody());
+        map<string,object> responseMap = (map<string,object>) json.deserializeuntyped(res.getbody());
+        string loginId = (string)responseMap.get('sub');
+        system.debug(loginId);
+        step1RegisterUrl(loginId);
+        return loginId;
+    }
+
+    public static void step1RegisterUrl(string loginIda){
+        http http = new http();
+        httpRequest req1 = new httpRequest();
+        string body = 
+            '{'+
+    '"registerUploadRequest": {'+
+        '"recipes": ['+
+            '"urn:li:digitalmediaRecipe:feedshare-image"'+
+        '],'+
+        '"owner": "urn:li:person:'+loginIda+'",'+
+        '"serviceRelationships": ['+
+            '{'+
+                '"relationshipType": "OWNER",'+
+                '"identifier": "urn:li:userGeneratedContent"'+
+            '}'+
+        ']'+
+    '}'+
+'}';
+        req1.setHeader('X-Restli-Protocol-Version','2.0.0');
+        req1.setHeader('Content-Type','application/json');
+        req1.setMethod('POST');
+        req1.setEndpoint('callout:NameCredentialsForLinkedIn/v2/assets?action=registerUpload');
+        req1.setBody(body);
+        
+        
+        httpResponse res = http.send(req1);
+        system.debug(res);
+        system.debug(res.getBody());
+        map<string,object> responseMap1 = (map<string,object>) json.deserializeuntyped(res.getbody());
+        map<string,object> responseMap2 =  ( map<string,object>)responseMap1.get('value');
+        
+        string asset = (string)responseMap2.get('asset');
+        
+        system.debug(asset);
+        Map<String, Object> responseMap3 = (Map<String, Object>) responseMap2.get('uploadMechanism');
+        Map<String, Object> responseMap4 = (Map<String, Object>) responseMap3.get('com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest');
+		string uploadUrl = (string)responseMap4.get('uploadUrl');
+        system.debug(uploadUrl);
+        uploadImage(uploadUrl); //send uploadurl to other method
+        //AcuallyPostingImageOnLinkedIN(asset);
+    }
+    
+	
+
+    public static void uploadImage(string uploadUrl) {
+        
+        String filePath = 'https://practiceorg-f-dev-ed.develop.lightning.force.com/lightning/r/ContentDocument/069J4000000yalvIAA';
+        Blob fileBlob = getFileBlob(filePath);
+
+        // Endpoint URL
+        String endpoint = uploadUrl;
+
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(endpoint);
+        req.setMethod('PUT');
+        req.setHeader('Authorization', 'Bearer redacted');
+        req.setHeader('Content-Type', 'image/png'); 
+        req.setBodyAsBlob(fileBlob);
+
+        Http http = new Http();
+        HttpResponse res = http.send(req);
+
+        System.debug('Response: ' + res.getBody());
+        System.debug('Status: ' + res.getStatus());
+    }
+
+   
+    public static Blob getFileBlob(String filePath) {
+        ContentVersion contentVersion = [
+            SELECT VersionData 
+            FROM ContentVersion 
+            WHERE ContentDocumentId = '069J4000000yalvIAA' 
+            LIMIT 1
+        ];
+        return contentVersion.VersionData;
+        
+    }
+    
+    public static void AcuallyPostingImageOnLinkedIN(string asset){
+        string body =
+            '{'+
+    '"author": "urn:li:person:bIvvyr2aIf",'+
+    '"lifecycleState": "PUBLISHED",'+
+    '"specificContent": {'+
+        '"com.linkedin.ugc.ShareContent": {'+
+            '"shareCommentary": {'+
+                '"text": "Feeling inspired after meeting so many talented individuals at this year'+'s conference. #talentconnect"'+
+            '},'+
+            '"shareMediaCategory": "IMAGE",'+
+            '"media": ['+
+                '{'+
+                    '"status": "READY",'+
+                    '"description": {'+
+                        '"text": "Center stage!"'+
+                    '},'+
+                    '"media": "'+asset+'",'+
+                    '"title": {'+
+                        '"text": "LinkedIn Talent Connect 2021"'+
+                    '}'+
+               '}'+
+            ']'+
+        '}'+
+    '},'+
+    '"visibility": {'+
+        '"com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"'+
+    '}'+
+'}';
+            
+            
+        http http = new http();
+        httpRequest req3 = new httpRequest();
+        req3.setMethod('POST');
+        req3.setHeader('X-Restli-Protocol-Version','2.0.0');
+        req3.setHeader('Content-Type','application/json');
+        req3.setEndpoint('callout:NameCredentialsForLinkedIn/v2/ugcPosts');
+        req3.setBody(body);
+        HttpResponse res = http.send(req3);
+
+        System.debug('Response: ' + res.getBody());
+        System.debug('Status: ' + res.getStatus());
+        
+    }
+
+    
+}
