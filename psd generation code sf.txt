@@ -1,0 +1,218 @@
+<apex:page standardController="Opportunity" sidebar="false" extensions="PDFContraPdfController" applyBodyTag="false" renderAs="pdf">
+
+    <style>
+        @page {
+            size: A3;
+            margin: 15mm;
+            margin-top: 2px;
+        }
+
+        .header, .content {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .logo {
+            text-align: left;
+            margin-left: 10px;
+        }
+
+        .red-text {
+            color: red;
+        }
+
+        .bg {
+            background-color: grey;
+        }
+
+        .table-container {
+            margin-top: 5px;
+        }
+
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .custom-table th, .custom-table td {
+            padding: 5px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+
+        .signature-line {
+            display: inline-block;
+            border-bottom: 1px solid black;
+            width: 150px;
+            margin-left: 10px;
+        }
+
+        .row {
+            display: flex;
+        }
+
+        .col-4 {
+            width: 33.33%;
+        }
+
+        .col-8 {
+            width: 66.66%;
+        }
+
+        .underline {
+            text-decoration: overline;
+        }
+    </style>
+
+    <div class="logo">
+        <apex:image id="AxionLogo" value="{!$Resource.logo}" height="70" width="200" />
+    </div>
+
+    <div class="header">
+        <p style="text-align: center; font-size: 12px;">CALLE 50, EDIF. PANACREDIT, TEL: 507-264-3075</p>
+    </div>
+
+    <div class="content">
+        <p style="text-align: center; font-size: 12px;">Panama, <span class="red-text">Date Processed</span></p>
+
+        <p style="font-size: 12px;">Gentlemen,</p>
+        <p style="font-size: 12px;">SOCIAL SECURITY FUND<br />
+        Payment Department<br />
+        Section of Discounts for Pensioners and Retirees<br />
+        City -</p>
+
+        <p style="font-size: 12px;">
+            By means of this note, I authorize the deduction from my pension/retirement of the total of B/. 
+            <span class="red-text">C48</span>, through 
+            <span class="red-text">C61</span> biweekly subscriptions of B/. 
+            <span class="red-text">C58</span> each and a final discount of 
+            <span class="red-text">C60</span>.
+        </p>
+
+        <p style="font-size: 12px;">
+            This discount must be remitted in favor of Corporación de Finanzas del País, S.A. under the code 87060169 
+            from the <span class="red-text">C62</span> fortnight of the month of 
+            <span class="red-text">MONTH C62</span> of 
+            <span class="red-text">Year C62</span> to be credited to the obligation that I have contracted with said institution.
+        </p>
+
+        <p style="font-size: 12px;">
+            This authorization is irrevocable and for any modification, the WRITTEN CONSENT of Corporación de Finanzas del País, S.A. is required.
+        </p>
+    </div>
+
+    <table style="width:100%;">
+        <tr>
+            <td style="width: 35%;"></td>
+            <td style="width: 65%; font-size: 12px;">Yours sincerely,</td>
+        </tr>
+    </table>
+
+    <table style="width:100%;">
+        <tbody>
+            <tr>
+                <td style="width: 35%;"></td>
+                <td style="width: 65%; font-size: 12px;">
+                    NAME : D1, D2, D3, D4, AND D5 (IF APPLICABLE)<br />
+                    SIGNATURE : ________________________<br />
+                    LICENSE : <span class="red-text">D11</span><br />
+                    SOCIAL SECURITY : <span class="red-text">D12</span><br />
+                    FORM : <span class="red-text">T7</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p style="text-align: center; font-size: 12px;"><b>CANCELLATIONS TO BE MADE</b></p>
+
+    <div class="table-container">
+        <table class="custom-table" style="width:100%;">
+            <thead>
+                <tr style="background-color: #d8d8d8;">
+                    <th style="width: 5%;"></th>
+                    <th style="width: 50%;">Creditor</th>
+                    <th style="width: 20%;">Code</th>
+                    <th style="width: 20%;">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.</td>
+                    <td><span class="red-text">O1</span></td>
+                    <td><span class="red-text">O2</span></td>
+                    <td><span class="red-text">O6</span></td>
+                </tr>
+                <tr>
+                    <td>2.</td>
+                    <td>a</td>
+                    <td>a</td>
+                    <td>a</td>
+                </tr>
+                <tr>
+                    <td>3.</td>
+                    <td>a</td>
+                    <td>a</td>
+                    <td>a</td>
+                </tr>
+                <tr>
+                    <td>4.</td>
+                    <td>a</td>
+                    <td>a</td>
+                    <td>a</td>
+                </tr>
+                <tr>
+                    <td>5.</td>
+                    <td>a</td>
+                    <td>a</td>
+                    <td>a</td>
+                </tr>
+                <tr>
+                    <td>6.</td>
+                    <td>a</td>
+                    <td>a</td>
+                    <td>a</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-container" style="margin-top: 20px;">
+        <table class="custom-table" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 50%;"></th>
+                    <th style="width: 50%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><p style="text-decoration:overline; font-size: 12px;">
+                        Corporación de Finanzas del Pais, S.A.
+                        </p></td>
+                    <td><p style="text-decoration:overline; font-size: 12px;">
+                        Social Security Fund Officer Name 
+                        </p></td>
+                </tr>
+                <tr>
+                    <td><p style="text-decoration:overline; font-size: 12px;">
+                        Stamp
+                        </p></td>
+                    <td><p style="font-size: 12px;">
+                        This authorization has been Reviewed and Accepted
+                        </p></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <p style="text-align: center; font-size: 12px; margin-bottom: 0;">
+        Make a check payable to Corporación de Finanzas del Pais, S.A.
+    </p>
+    
+    <hr style="border: 0; border-top: 2px solid #271a11; width: 100%; margin-top: 0; padding: 0;" />
+    
+    <p style="text-align: center; font-size: 12px;">Reference: Application No. 1867 – Panacredit – Chitre of July 06,</p>
+    <p style="text-align: center; font-size: 12px;">We appreciate retaining Original and returning COPY</p>
+
+</apex:page>
